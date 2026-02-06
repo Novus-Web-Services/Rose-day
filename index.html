@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Rose Day - A Special Flower For You</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="seed-container">
+            <div class="glowing-seed"></div>
+            <p class="loading-text">A special flower for a special person...</p>
+        </div>
+    </div>
+
+    <!-- Particle Canvas -->
+    <canvas id="petals-canvas"></canvas>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+        <!-- Bloom Button -->
+        <div id="bloom-container">
+            <button id="bloom-btn" class="bloom-button">
+                <span class="btn-text">Touch to Bloom</span>
+                <span class="btn-glow"></span>
+            </button>
+        </div>
+
+        <!-- Rose Container -->
+        <div id="rose-container" class="hidden">
+            <svg id="rose-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Gradients -->
+                    <linearGradient id="stemGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#2d5a27;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#4a7c40;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2d5a27;stop-opacity:1" />
+                    </linearGradient>
+                    
+                    <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#5a8f4e;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#3d6b32;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2d5a27;stop-opacity:1" />
+                    </linearGradient>
+                    
+                    <radialGradient id="petalGradient1" cx="30%" cy="30%" r="70%">
+                        <stop offset="0%" style="stop-color:#ff6b7a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#e63950;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#b01e3a;stop-opacity:1" />
+                    </radialGradient>
+                    
+                    <radialGradient id="petalGradient2" cx="50%" cy="20%" r="80%">
+                        <stop offset="0%" style="stop-color:#ff8fa3;stop-opacity:1" />
+                        <stop offset="40%" style="stop-color:#e63950;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#8b1538;stop-opacity:1" />
+                    </radialGradient>
+                    
+                    <radialGradient id="petalGradient3" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" style="stop-color:#ffb3c1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d62839;stop-opacity:1" />
+                    </radialGradient>
+                    
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#ffed4e;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d4af37;stop-opacity:1" />
+                    </linearGradient>
+                    
+                    <!-- Glow Filter -->
+                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Stem -->
+                <path id="stem" class="rose-path stem" 
+                      d="M200 450 Q205 380 200 320 Q195 260 200 200 Q205 150 200 120" 
+                      stroke="url(#stemGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+                <!-- Thorns -->
+                <path id="thorn1" class="rose-path thorn" 
+                      d="M200 380 L185 370 L200 375" 
+                      stroke="#4a7c40" stroke-width="2" fill="#2d5a27"/>
+                <path id="thorn2" class="rose-path thorn" 
+                      d="M200 300 L215 290 L200 295" 
+                      stroke="#4a7c40" stroke-width="2" fill="#2d5a27"/>
+                <path id="thorn3" class="rose-path thorn" 
+                      d="M200 240 L188 230 L200 235" 
+                      stroke="#4a7c40" stroke-width="2" fill="#2d5a27"/>
+
+                <!-- Leaves -->
+                <path id="leaf1" class="rose-path leaf" 
+                      d="M200 340 Q160 320 150 290 Q140 260 170 250 Q200 240 200 280 Q200 320 200 340" 
+                      stroke="url(#leafGradient)" stroke-width="2" fill="none"/>
+                <path id="leaf2" class="rose-path leaf" 
+                      d="M200 280 Q240 260 250 230 Q260 200 230 190 Q200 180 200 220 Q200 260 200 280" 
+                      stroke="url(#leafGradient)" stroke-width="2" fill="none"/>
+
+                <!-- Rose Petals - Outer Layer -->
+                <path id="petal-outer1" class="rose-path petal-outer" 
+                      d="M200 120 Q150 100 140 60 Q135 30 170 25 Q200 20 230 25 Q265 30 260 60 Q250 100 200 120" 
+                      stroke="#e63950" stroke-width="2" fill="none"/>
+                <path id="petal-outer2" class="rose-path petal-outer" 
+                      d="M200 120 Q120 110 100 70 Q90 40 130 35 Q160 30 200 50 Q240 30 270 35 Q310 40 300 70 Q280 110 200 120" 
+                      stroke="#d62839" stroke-width="2" fill="none"/>
+
+                <!-- Rose Petals - Middle Layer -->
+                <path id="petal-mid1" class="rose-path petal-mid" 
+                      d="M200 100 Q160 85 155 55 Q150 35 180 30 Q200 25 220 30 Q250 35 245 55 Q240 85 200 100" 
+                      stroke="#ff6b7a" stroke-width="2" fill="none"/>
+                <path id="petal-mid2" class="rose-path petal-mid" 
+                      d="M200 95 Q140 80 125 50 Q115 25 155 20 Q180 15 200 35 Q220 15 245 20 Q285 25 275 50 Q260 80 200 95" 
+                      stroke="#e63950" stroke-width="2" fill="none"/>
+
+                <!-- Rose Petals - Inner Layer -->
+                <path id="petal-inner1" class="rose-path petal-inner" 
+                      d="M200 80 Q175 70 170 50 Q165 35 185 30 Q200 25 215 30 Q235 35 230 50 Q225 70 200 80" 
+                      stroke="#ff8fa3" stroke-width="2" fill="none"/>
+                <path id="petal-inner2" class="rose-path petal-inner" 
+                      d="M200 70 Q180 60 175 45 Q170 30 190 25 Q200 20 210 25 Q230 30 225 45 Q220 60 200 70" 
+                      stroke="#ffb3c1" stroke-width="2" fill="none"/>
+
+                <!-- Center Bud -->
+                <ellipse id="center-bud" class="rose-path center" 
+                         cx="200" cy="45" rx="15" ry="20" 
+                         stroke="#d62839" stroke-width="2" fill="none"/>
+
+                <!-- Decorative Sparkles -->
+                <circle id="sparkle1" class="sparkle" cx="150" cy="50" r="3" fill="url(#goldGradient)" opacity="0"/>
+                <circle id="sparkle2" class="sparkle" cx="250" cy="70" r="2" fill="url(#goldGradient)" opacity="0"/>
+                <circle id="sparkle3" class="sparkle" cx="180" cy="30" r="2.5" fill="url(#goldGradient)" opacity="0"/>
+                <circle id="sparkle4" class="sparkle" cx="220" cy="40" r="2" fill="url(#goldGradient)" opacity="0"/>
+                <circle id="sparkle5" class="sparkle" cx="200" cy="20" r="3" fill="url(#goldGradient)" opacity="0"/>
+            </svg>
+        </div>
+
+        <!-- Message Card -->
+        <div id="message-card" class="hidden">
+            <div class="glass-card">
+                <h1 class="title">Happy Rose Day!</h1>
+                <div class="divider">
+                    <span class="line"></span>
+                    <span class="heart">🌹</span>
+                    <span class="line"></span>
+                </div>
+                <p class="personal-note">To the most beautiful person in my life,<br>
+                May this rose bring a smile to your face<br>
+                and warmth to your heart. ❤️</p>
+                <p class="signature">- With Love</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
